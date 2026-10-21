@@ -11,4 +11,8 @@ homepage.workspace = true
 
 [dependencies]
 owservable-core.workspace = true
-
+async-trait.workspace = true
+futures-util = "0.3"
+mongodb = "3"
+serde_json.workspace = true
+tokio.workspace = true

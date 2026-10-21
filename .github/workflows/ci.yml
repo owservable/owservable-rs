@@ -17,8 +17,16 @@ jobs:
         options: --health-cmd pg_isready --health-interval 2s --health-timeout 5s --health-retries 15
     env:
       OWSERVABLE_POSTGRES_URL: host=127.0.0.1 port=5432 user=postgres
+      OWSERVABLE_MONGODB_URL: mongodb://127.0.0.1:27017/?directConnection=true
     steps:
       - uses: actions/checkout@v5
+      # change streams need a replica set; service containers can't pass --replSet
+      - name: mongodb replica set
+        run: |
+          docker run -d --name mongo -p 27017:27017 mongo:7 --replSet rs0 --bind_ip_all
+          until docker exec mongo mongosh --quiet --eval 'db.runCommand({ping: 1})' >/dev/null 2>&1; do sleep 1; done
+          docker exec mongo mongosh --quiet --eval 'rs.initiate({_id: "rs0", members: [{_id: 0, host: "localhost:27017"}]})'
+          until [ "$(docker exec mongo mongosh --quiet --eval 'rs.status().myState')" = "1" ]; do sleep 1; done
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt, clippy
