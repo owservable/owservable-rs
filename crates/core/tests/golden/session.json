@@ -1,0 +1,68 @@
+{
+	"name": "session",
+	"settleMs": 300,
+	"docs": [
+		{
+			"_id": "a",
+			"name": "Alpha",
+			"status": "open",
+			"n": 1
+		},
+		{
+			"_id": "b",
+			"name": "Bravo",
+			"status": "open",
+			"n": 2
+		},
+		{
+			"_id": "c",
+			"name": "Charlie",
+			"status": "closed",
+			"n": 3
+		},
+		{
+			"_id": "d",
+			"name": "Delta",
+			"status": "open",
+			"n": 4
+		}
+	],
+	"steps": [
+		{
+			"input": {
+				"type": "authenticate",
+				"jwt": "initial-jwt"
+			},
+			"outputs": [
+				{
+					"type": "refresh",
+					"payload": {
+						"jwt": "refreshed-jwt",
+						"user": {
+							"id": "u1"
+						}
+					},
+					"refresh_in": 600000
+				}
+			]
+		},
+		{
+			"input": {
+				"type": "location",
+				"path": "/dashboard"
+			},
+			"outputs": []
+		},
+		{
+			"input": {
+				"type": "pong",
+				"id": 0
+			},
+			"outputs": []
+		},
+		{
+			"disconnect": true,
+			"outputs": []
+		}
+	]
+}

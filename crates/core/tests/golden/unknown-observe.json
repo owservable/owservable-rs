@@ -1,0 +1,55 @@
+{
+	"name": "unknown-observe",
+	"settleMs": 300,
+	"docs": [
+		{
+			"_id": "a",
+			"name": "Alpha",
+			"status": "open",
+			"n": 1
+		},
+		{
+			"_id": "b",
+			"name": "Bravo",
+			"status": "open",
+			"n": 2
+		},
+		{
+			"_id": "c",
+			"name": "Charlie",
+			"status": "closed",
+			"n": 3
+		},
+		{
+			"_id": "d",
+			"name": "Delta",
+			"status": "open",
+			"n": 4
+		}
+	],
+	"steps": [
+		{
+			"input": {
+				"type": "subscribe",
+				"target": "list",
+				"scope": "many",
+				"observe": "nope",
+				"config": {
+					"subscriptionId": "s1",
+					"strict": false,
+					"incremental": false,
+					"query": {}
+				}
+			},
+			"outputs": [
+				{
+					"thrown": "[@owservable/core] -> storeFactory: no backend registered for observe \"nope\" (target \"list\"). Registered backends: items, tagged"
+				}
+			]
+		},
+		{
+			"disconnect": true,
+			"outputs": []
+		}
+	]
+}

@@ -1,0 +1,22 @@
+[package]
+name = "owservable-core"
+description = "owservable core: reactive data protocol, stores and backend interface"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+
+
+[dependencies]
+async-trait.workspace = true
+indexmap = "2"
+regex = "1"
+serde_json.workspace = true
+tokio.workspace = true
+uuid = { version = "1", features = ["v4"] }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["test-util"] }

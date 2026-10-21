@@ -1,0 +1,151 @@
+{
+	"name": "one-by-id",
+	"settleMs": 300,
+	"docs": [
+		{
+			"_id": "a",
+			"name": "Alpha",
+			"status": "open",
+			"n": 1
+		},
+		{
+			"_id": "b",
+			"name": "Bravo",
+			"status": "open",
+			"n": 2
+		},
+		{
+			"_id": "c",
+			"name": "Charlie",
+			"status": "closed",
+			"n": 3
+		},
+		{
+			"_id": "d",
+			"name": "Delta",
+			"status": "open",
+			"n": 4
+		}
+	],
+	"steps": [
+		{
+			"input": {
+				"type": "subscribe",
+				"target": "doc",
+				"scope": "one",
+				"observe": "items",
+				"config": {
+					"subscriptionId": "s1",
+					"strict": false,
+					"incremental": false,
+					"query": {
+						"_id": "b"
+					}
+				}
+			},
+			"outputs": [
+				{
+					"type": "debug",
+					"id": 0,
+					"payload": {
+						"event": "updateSubscription",
+						"target": "doc",
+						"availableTargets": "doc"
+					}
+				},
+				{
+					"subscriptionId": "s1",
+					"type": "update",
+					"target": "doc",
+					"payload": {
+						"doc": {
+							"_id": "b",
+							"name": "Bravo",
+							"status": "open",
+							"n": 2
+						}
+					},
+					"execution_time": "<ms>",
+					"query": "{\"_id\":\"b\"}",
+					"sort": "{}",
+					"fields": "{}",
+					"paging": "{\"skip\":0,\"limit\":1}",
+					"populates": "[]",
+					"virtuals": "[]"
+				}
+			]
+		},
+		{
+			"changes": [
+				{
+					"op": "update",
+					"id": "b",
+					"set": {
+						"name": "Bravo 2"
+					}
+				}
+			],
+			"outputs": [
+				{
+					"subscriptionId": "s1",
+					"type": "update",
+					"target": "doc",
+					"payload": {
+						"doc": {
+							"_id": "b",
+							"name": "Bravo 2",
+							"status": "open",
+							"n": 2
+						}
+					},
+					"execution_time": "<ms>",
+					"query": "{\"_id\":\"b\"}",
+					"sort": "{}",
+					"fields": "{}",
+					"paging": "{\"skip\":0,\"limit\":1}",
+					"populates": "[]",
+					"virtuals": "[]"
+				}
+			]
+		},
+		{
+			"changes": [
+				{
+					"op": "update",
+					"id": "c",
+					"set": {
+						"name": "Charlie 2"
+					}
+				}
+			],
+			"outputs": []
+		},
+		{
+			"changes": [
+				{
+					"op": "delete",
+					"id": "b"
+				}
+			],
+			"outputs": [
+				{
+					"subscriptionId": "s1",
+					"type": "delete",
+					"target": "doc",
+					"payload": "b",
+					"execution_time": "<ms>",
+					"query": "{\"_id\":\"b\"}",
+					"sort": "{}",
+					"fields": "{}",
+					"paging": "{\"skip\":0,\"limit\":1}",
+					"populates": "[]",
+					"virtuals": "[]"
+				}
+			]
+		},
+		{
+			"disconnect": true,
+			"outputs": []
+		}
+	]
+}

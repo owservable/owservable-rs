@@ -1,0 +1,5 @@
+# their only build script is `npx only-allow pnpm`; lib/ ships prebuilt
+allowBuilds:
+  '@owservable/actions': false
+  '@owservable/core': false
+  '@owservable/folders': false

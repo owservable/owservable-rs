@@ -1,0 +1,239 @@
+{
+	"name": "many-burst",
+	"settleMs": 300,
+	"docs": [
+		{
+			"_id": "a",
+			"name": "Alpha",
+			"status": "open",
+			"n": 1
+		},
+		{
+			"_id": "b",
+			"name": "Bravo",
+			"status": "open",
+			"n": 2
+		},
+		{
+			"_id": "c",
+			"name": "Charlie",
+			"status": "closed",
+			"n": 3
+		},
+		{
+			"_id": "d",
+			"name": "Delta",
+			"status": "open",
+			"n": 4
+		}
+	],
+	"steps": [
+		{
+			"input": {
+				"type": "subscribe",
+				"target": "list",
+				"scope": "many",
+				"observe": "items",
+				"config": {
+					"subscriptionId": "s1",
+					"strict": false,
+					"incremental": false,
+					"query": {
+						"status": "open"
+					}
+				}
+			},
+			"outputs": [
+				{
+					"type": "debug",
+					"id": 0,
+					"payload": {
+						"event": "updateSubscription",
+						"target": "list",
+						"availableTargets": "list"
+					}
+				},
+				{
+					"subscriptionId": "s1",
+					"type": "update",
+					"target": "list",
+					"payload": {
+						"list": [
+							{
+								"_id": "a",
+								"name": "Alpha",
+								"status": "open",
+								"n": 1
+							},
+							{
+								"_id": "b",
+								"name": "Bravo",
+								"status": "open",
+								"n": 2
+							},
+							{
+								"_id": "d",
+								"name": "Delta",
+								"status": "open",
+								"n": 4
+							}
+						],
+						"_listRecounting": true
+					},
+					"execution_time": "<ms>",
+					"query": "{\"status\":\"open\"}",
+					"sort": "{}",
+					"fields": "{}",
+					"paging": "{}",
+					"populates": "[]",
+					"virtuals": "[]"
+				},
+				{
+					"subscriptionId": "s1",
+					"type": "total",
+					"target": "list",
+					"total": 3,
+					"execution_time": "<ms>",
+					"query": "{\"status\":\"open\"}",
+					"sort": "{}",
+					"fields": "{}",
+					"paging": "{}",
+					"populates": "[]",
+					"virtuals": "[]"
+				}
+			]
+		},
+		{
+			"changes": [
+				{
+					"op": "update",
+					"id": "a",
+					"set": {
+						"name": "A1"
+					}
+				},
+				{
+					"op": "update",
+					"id": "a",
+					"set": {
+						"name": "A2"
+					}
+				},
+				{
+					"op": "update",
+					"id": "a",
+					"set": {
+						"name": "A3"
+					}
+				}
+			],
+			"outputs": [
+				{
+					"subscriptionId": "s1",
+					"type": "update",
+					"target": "list",
+					"payload": {
+						"list": [
+							{
+								"_id": "a",
+								"name": "A1",
+								"status": "open",
+								"n": 1
+							},
+							{
+								"_id": "b",
+								"name": "Bravo",
+								"status": "open",
+								"n": 2
+							},
+							{
+								"_id": "d",
+								"name": "Delta",
+								"status": "open",
+								"n": 4
+							}
+						],
+						"_listCount": 3
+					},
+					"execution_time": "<ms>",
+					"query": "{\"status\":\"open\"}",
+					"sort": "{}",
+					"fields": "{}",
+					"paging": "{}",
+					"populates": "[]",
+					"virtuals": "[]"
+				},
+				{
+					"subscriptionId": "s1",
+					"type": "total",
+					"target": "list",
+					"total": 3,
+					"execution_time": "<ms>",
+					"query": "{\"status\":\"open\"}",
+					"sort": "{}",
+					"fields": "{}",
+					"paging": "{}",
+					"populates": "[]",
+					"virtuals": "[]"
+				},
+				{
+					"subscriptionId": "s1",
+					"type": "update",
+					"target": "list",
+					"payload": {
+						"list": [
+							{
+								"_id": "a",
+								"name": "A3",
+								"status": "open",
+								"n": 1
+							},
+							{
+								"_id": "b",
+								"name": "Bravo",
+								"status": "open",
+								"n": 2
+							},
+							{
+								"_id": "d",
+								"name": "Delta",
+								"status": "open",
+								"n": 4
+							}
+						],
+						"_listCount": 3
+					},
+					"execution_time": "<ms>",
+					"query": "{\"status\":\"open\"}",
+					"sort": "{}",
+					"fields": "{}",
+					"paging": "{}",
+					"populates": "[]",
+					"virtuals": "[]"
+				}
+			]
+		},
+		{
+			"wait": 5200,
+			"outputs": [
+				{
+					"subscriptionId": "s1",
+					"type": "total",
+					"target": "list",
+					"total": 3,
+					"execution_time": "<ms>",
+					"query": "{\"status\":\"open\"}",
+					"sort": "{}",
+					"fields": "{}",
+					"paging": "{}",
+					"populates": "[]",
+					"virtuals": "[]"
+				}
+			]
+		},
+		{
+			"disconnect": true,
+			"outputs": []
+		}
+	]
+}

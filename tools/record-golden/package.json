@@ -1,0 +1,14 @@
+{
+	"name": "record-golden",
+	"private": true,
+	"description": "records owservable wire-protocol fixtures from the TypeScript v3 implementation",
+	"license": "Unlicense",
+	"scripts": {
+		"record": "node record.js"
+	},
+	"dependencies": {
+		"@owservable/core": "3.2.0",
+		"rxjs": "7.8.2",
+		"sift": "17.1.3"
+	}
+}
