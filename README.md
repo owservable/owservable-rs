@@ -2,7 +2,7 @@
 
 # owservable-rs
 
-Rust implementation of the owservable reactive stack. Speaks the same websocket wire protocol as the TypeScript v3 packages (`@owservable/*` on npm, now maintenance-only), so existing frontends keep working.
+Rust implementation of the owservable reactive stack. Speaks the same websocket wire protocol as the TypeScript v3 packages (`@owservable/*` on npm), so frontends work with either. Both implementations are actively developed.
 
 | Crate | Purpose |
 | --- | --- |

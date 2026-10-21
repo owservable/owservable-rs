@@ -3,7 +3,7 @@ resolver = "3"
 members = ["crates/*"]
 
 [workspace.package]
-version = "4.0.0-alpha.0"
+version = "1.0.0-alpha.0"
 edition = "2024"
 rust-version = "1.90"
 license = "Unlicense"
@@ -12,7 +12,7 @@ repository = "https://github.com/owservable/owservable-rs"
 homepage = "https://owservable.github.io"
 
 [workspace.dependencies]
-owservable-core = { path = "crates/core", version = "4.0.0-alpha.0" }
+owservable-core = { path = "crates/core", version = "1.0.0-alpha.0" }
 async-trait = "0.1"
 serde_json = { version = "1", features = ["preserve_order"] }
 tokio = { version = "1", features = ["rt", "sync", "time", "macros"] }
