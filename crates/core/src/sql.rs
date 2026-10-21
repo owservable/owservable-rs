@@ -62,9 +62,28 @@ pub fn order_by(sort: &Value, pk: &str) -> String {
 	if terms.is_empty() { String::new() } else { format!(" ORDER BY {}", terms.join(", ")) }
 }
 
+/// Column list for `SELECT`: the included columns (`{name: 1}`) plus the primary key, or `*` when none are included.
+pub fn projection(fields: &Value, pk: &str, columns: &[String]) -> String {
+	let included = |column: &String| {
+		fields
+			.get(column)
+			.is_some_and(|v| !matches!(v, Value::Null | Value::Bool(false)) && v.as_f64() != Some(0.0))
+	};
+	if !columns.iter().any(included) {
+		return "*".into();
+	}
+	let columns: Vec<String> = columns.iter().filter(|c| *c == pk || included(c)).map(|c| ident(c)).collect();
+	columns.join(", ")
+}
+
 /// Double-quoted SQL identifier.
 pub fn ident(name: &str) -> String {
 	format!("\"{}\"", name.replace('"', "\"\""))
+}
+
+/// Single-quoted SQL string literal (for DDL, where parameters can't be used).
+pub fn literal(text: &str) -> String {
+	format!("'{}'", text.replace('\'', "''"))
 }
 
 fn column<'a>(field: &'a str, pk: &'a str) -> &'a str {

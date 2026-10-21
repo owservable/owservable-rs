@@ -25,7 +25,7 @@ use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
 use async_trait::async_trait;
-use owservable_core::sql::{SQLITE, ident, order_by, where_clause};
+use owservable_core::sql::{SQLITE, ident, literal, order_by, projection, where_clause};
 use owservable_core::{Error, ObservableBackend};
 use rusqlite::types::{Value as SqlValue, ValueRef};
 use rusqlite::{Connection, params_from_iter};
@@ -119,10 +119,6 @@ fn table_info(connection: &Connection, table: &str) -> Result<(String, Vec<Strin
 		.map(|(name, _)| name.clone())
 		.ok_or_else(|| format!("table \"{table}\" has no primary key"))?;
 	Ok((pk, rows.into_iter().map(|(name, _)| name).collect()))
-}
-
-fn literal(text: &str) -> String {
-	format!("'{}'", text.replace('\'', "''"))
 }
 
 fn triggers_sql(table: &str, pk: &str, columns: &[String]) -> String {
@@ -257,7 +253,7 @@ impl SqliteBackend {
 		let condition = where_clause(query, &self.pk, &SQLITE, 0)?;
 		let mut sql = format!(
 			"SELECT {} FROM {} WHERE {}{}",
-			self.projection(fields),
+			projection(fields, &self.pk, &self.columns),
 			ident(&self.table),
 			condition.sql,
 			order_by(sort, &self.pk)
@@ -268,20 +264,6 @@ impl SqliteBackend {
 			sql += &format!(" LIMIT {} OFFSET {skip}", limit.unwrap_or(-1));
 		}
 		Ok((sql, condition.params))
-	}
-
-	/// Included columns (`{name: 1}`) plus the primary key; everything when none are included.
-	fn projection(&self, fields: &Value) -> String {
-		let included = |column: &String| {
-			fields
-				.get(column)
-				.is_some_and(|v| !matches!(v, Value::Null | Value::Bool(false)) && v.as_f64() != Some(0.0))
-		};
-		if !self.columns.iter().any(included) {
-			return "*".into();
-		}
-		let columns: Vec<String> = self.columns.iter().filter(|c| **c == self.pk || included(c)).map(|c| ident(c)).collect();
-		columns.join(", ")
 	}
 }
 
