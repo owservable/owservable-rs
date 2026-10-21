@@ -131,7 +131,8 @@ fn field_matches(field: Option<&Value>, condition: &Value) -> Result<bool, Strin
 			"$lte" => compares(field, arg, |o| o != Ordering::Greater),
 			"$in" => subqueries(arg)?.iter().any(|value| equals(field, value)),
 			"$nin" => !subqueries(arg)?.iter().any(|value| equals(field, value)),
-			"$exists" => field.is_some() == truthy(arg),
+			// null counts as missing, matching the SQL backends (a column always "exists"); Mongo itself would say it exists
+			"$exists" => field.is_some_and(|value| !value.is_null()) == truthy(arg),
 			"$not" => !field_matches(field, arg)?,
 			"$regex" => regex_matches(field, arg, ops.get("$options"))?,
 			"$options" => true,
@@ -208,7 +209,7 @@ mod tests {
 			json!({"missing": null}),
 			json!({"n": {"$gt": 2, "$lte": 3}}),
 			json!({"n": {"$in": [1, 3]}, "name": {"$nin": ["Bravo"]}}),
-			json!({"name": {"$ne": "Bravo"}, "missing": {"$exists": false}, "nothing": {"$exists": true}}),
+			json!({"name": {"$ne": "Bravo"}, "missing": {"$exists": false}, "nothing": {"$exists": false}, "n": {"$exists": true}}),
 			json!({"name": {"$regex": "^al", "$options": "i"}}),
 			json!({"n": {"$not": {"$gt": 5}}}),
 			json!({"$or": [{"n": 1}, {"n": 3}], "$and": [{"name": "Alpha"}], "$nor": [{"n": 9}]}),

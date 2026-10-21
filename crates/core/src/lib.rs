@@ -7,6 +7,8 @@
 mod backend;
 mod client;
 pub mod query;
+#[cfg(feature = "sql")]
+pub mod sql;
 mod store;
 
 pub use backend::{ConnectionManager, Error, Middleware, ObservableBackend, Registry};

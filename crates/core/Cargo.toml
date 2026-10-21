@@ -10,6 +10,10 @@ repository.workspace = true
 homepage.workspace = true
 
 
+[features]
+# Mongo-style query -> SQL translation for the SQL backends
+sql = []
+
 [dependencies]
 async-trait.workspace = true
 indexmap = "2"
